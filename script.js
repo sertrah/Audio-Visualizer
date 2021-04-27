@@ -66,21 +66,16 @@ file.addEventListener("change", function() {
 function drawVisualiser(bufferLength, x, barWidth, barHeight, dataArray) {
     for (let i = 0; i < bufferLength; i++) {
         barHeight = dataArray[i] * 2 ;
-        const red = i * barHeight/ 20;
-        const green = i * 4;
-        const blue = barHeight / 2;
-        ctx.fillStyle = `rgb(${red},${green},${blue})`;
-        console.log(canvas.width/ 2 - x, x)
-        ctx.fillRect(canvas.width/ 2 - x, canvas.height - barHeight, barWidth, barHeight);
+        ctx.save();
+        ctx.translate(canvas.width/2, canvas.height/2);
+        ctx.rotate(i + Math.PI * 2/ bufferLength);
+        const hue = 15*i;
+        ctx.fillStyle = `hsl(${hue},100%, 50%)`;
+        console.log(canvas.width/ 2 - x, x);
+        // Here we put 0, 0 becouse our origin point was changeg thanks to 70 line {translate}
+        ctx.fillRect(0, 0, barWidth, barHeight);
         x += barWidth;
+        ctx.restore();
     }
-    for (let i = 0; i < bufferLength; i++) {
-        barHeight = dataArray[i] * 2 ;
-        const red = i * barHeight/ 20;
-        const green = i * 4;
-        const blue = barHeight / 2;
-        ctx.fillStyle = `rgb(${red},${green},${blue})`;
-        ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
-        x += barWidth;
-    }
+
 }
