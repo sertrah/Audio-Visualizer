@@ -16,11 +16,11 @@ container.addEventListener("click", () => {
     analyser = audioContext.createAnalyser();
     audioSource.connect(analyser);
     analyser.connect(audioContext.destination);
-    analyser.fftSize = 64;
+    analyser.fftSize = 2048;
     const bufferLength = analyser.frequencyBinCount;
     const dataArray = new Uint8Array(bufferLength);
 
-    const barWidth = (canvas.width/2 )/ bufferLength;
+    const barWidth = 1;
     let barHeight;
     let x;
     // here pasa the magic :B 
@@ -45,7 +45,7 @@ file.addEventListener("change", function() {
     analyser = audioContext.createAnalyser();
     audioSource.connect(analyser);
     analyser.connect(audioContext.destination);
-    analyser.fftSize = 64;
+    analyser.fftSize = 2048;
     const bufferLength = analyser.frequencyBinCount;
     const dataArray = new Uint8Array(bufferLength);
 
@@ -65,14 +65,17 @@ file.addEventListener("change", function() {
 
 function drawVisualiser(bufferLength, x, barWidth, barHeight, dataArray) {
     for (let i = 0; i < bufferLength; i++) {
-        barHeight = dataArray[i] * 2 ;
+        barHeight = dataArray[i] * 1.5 + 5;
+        // restart canvas draw
         ctx.save();
+        // Move the canvas pencil to the center becouse we passed the cordinated to the center
         ctx.translate(canvas.width/2, canvas.height/2);
-        ctx.rotate(i + Math.PI * 2/ bufferLength);
-        const hue = 15*i;
-        ctx.fillStyle = `hsl(${hue},100%, 50%)`;
-        console.log(canvas.width/ 2 - x, x);
+        // here we rotate the bars. 
+        ctx.rotate(i *  Math.PI * 10 / bufferLength);
+        const hue = i * 0.3;
+        ctx.fillStyle = `hsl(${hue},100%, ${ barHeight/3 }%)`;
         // Here we put 0, 0 becouse our origin point was changeg thanks to 70 line {translate}
+        // also here we are drawing the bars.
         ctx.fillRect(0, 0, barWidth, barHeight);
         x += barWidth;
         ctx.restore();
