@@ -20,7 +20,7 @@ container.addEventListener("click", () => {
     const bufferLength = analyser.frequencyBinCount;
     const dataArray = new Uint8Array(bufferLength);
 
-    const barWidth = canvas.width / bufferLength;
+    const barWidth = (canvas.width/2 )/ bufferLength;
     let barHeight;
     let x;
     // here pasa the magic :B 
@@ -29,7 +29,6 @@ container.addEventListener("click", () => {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         analyser.getByteFrequencyData(dataArray);
         drawVisualiser(bufferLength, x, barWidth, barHeight, dataArray);
-        console.log(canvas.width, canvas.height);
         requestAnimationFrame(animate);
     }
     animate();
@@ -50,7 +49,7 @@ file.addEventListener("change", function() {
     const bufferLength = analyser.frequencyBinCount;
     const dataArray = new Uint8Array(bufferLength);
 
-    const barWidth = canvas.width / bufferLength;
+    const barWidth = (canvas.width/2 )/ bufferLength;
     let barHeight;
     let x;
     // here pasa the magic :B 
@@ -65,6 +64,16 @@ file.addEventListener("change", function() {
 });
 
 function drawVisualiser(bufferLength, x, barWidth, barHeight, dataArray) {
+    for (let i = 0; i < bufferLength; i++) {
+        barHeight = dataArray[i] * 2 ;
+        const red = i * barHeight/ 20;
+        const green = i * 4;
+        const blue = barHeight / 2;
+        ctx.fillStyle = `rgb(${red},${green},${blue})`;
+        console.log(canvas.width/ 2 - x, x)
+        ctx.fillRect(canvas.width/ 2 - x, canvas.height - barHeight, barWidth, barHeight);
+        x += barWidth;
+    }
     for (let i = 0; i < bufferLength; i++) {
         barHeight = dataArray[i] * 2 ;
         const red = i * barHeight/ 20;
